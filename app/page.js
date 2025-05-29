@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { FaVideo } from 'react-icons/fa';
 import { AiFillPicture } from 'react-icons/ai';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri';
-import styles from '../../styles/Home.module.css';
+import styles from '../styles/Home.module.css';
 
 function Page() {
   const router = useRouter();

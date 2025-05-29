@@ -1,15 +1,18 @@
 'use client';
 import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from '../../../styles/Picture.module.css';
+import styles from '../../styles/Picture.module.css';
 import { IoIosArrowRoundBack } from "react-icons/io";
 import Cropper from 'react-easy-crop';
 import getCroppedImg from './cropImage';
+import { TbHandClick } from "react-icons/tb";
+import { FaInstagram } from "react-icons/fa";
+
 
 const timeOptions = [
   { time: 40, price: 49 },
-  { time: 60, price: 59 },
-  { time: 80, price: 79 },
+  { time: 60, price: 69 },
+  { time: 80, price: 99 },
 ];
 
 const captions = [
@@ -62,6 +65,8 @@ export default function PicturePage() {
   const [zoom, setZoom] = useState(1);
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedCaption, setSelectedCaption] = useState('');
+  const [igName, setIgName] = useState('');
+
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
@@ -96,7 +101,7 @@ export default function PicturePage() {
 
   const handlePayment = () => {
     if (!croppedImage) {
-      alert('กรุณาครอบรูปภาพก่อน');
+      alert('กรุณาเลือกรูปภาพก่อน');
       return;
     }
     if (selectedTime === null) {
@@ -107,6 +112,15 @@ export default function PicturePage() {
       alert('กรุณาเลือกข้อความแคปชั่น');
       return;
     }
+    if (!selectedFile) {
+    alert('กรุณาเลือกรูปภาพก่อน');
+    return;
+  }
+  if (!igName.trim()) {
+    alert('กรุณาใส่ชื่อ Instagram');
+    return;
+  }
+
     router.push('/PaymentPicture');
   };
 
@@ -114,7 +128,7 @@ export default function PicturePage() {
     <div className={styles.container} style={{ overflow: 'hidden' }}>
       {!imageSrc && (
         <>
-          <button onClick={() => router.back()} className={styles.backButton}>
+          <button onClick={() => router.push('/')} className={styles.backButton}>
             <IoIosArrowRoundBack />
           </button>
           <h1 className={styles.title}>ส่งรูปขึ้นจอ</h1>
@@ -135,7 +149,10 @@ export default function PicturePage() {
           {!previewUrl && (
             <div className={styles.uploadBox}>
               <label htmlFor="uploadInput">
-                <div className={styles.placeholder}>อัปโหลดรูปภาพ</div>
+                <div className={styles.placeholder}>
+                  <TbHandClick/>
+                  <p>อัปโหลดรูปภาพ</p>
+                </div>
               </label>
               <input
                 id="uploadInput"
@@ -152,7 +169,7 @@ export default function PicturePage() {
               <label htmlFor="uploadInput">
                 <img src={previewUrl} alt="preview" className={styles.previewImg} />
               </label>
-              <input
+              <input 
                 id="uploadInput"
                 type="file"
                 accept="image/*"
@@ -161,6 +178,19 @@ export default function PicturePage() {
               />
             </div>
           )}
+
+          <div className={styles.igWrapper}>
+            <FaInstagram className={styles.igIcon} />
+            <input
+              type="text"
+              placeholder="Instagram"
+              className={styles.igInput}
+              value={igName}
+              onChange={(e) => setIgName(e.target.value)}
+            />
+          </div>
+
+
 
           <select 
             value={selectedCaption}
@@ -193,7 +223,7 @@ export default function PicturePage() {
             />
           </div>
           <button onClick={showCroppedImage} className={styles.paymentButton}>
-            ยืนยันรูปที่ครอบ
+            ยืนยันรูปภาพ
           </button>
         </div>
       )}
